@@ -1,7 +1,7 @@
 # projp_6288110_6288184
 
-##==Current status==<br/>
-###Screen<br/>
+## ==Current status==<br/>
+### Screen<br/>
 Login (finish)<br/>
 Register (finish)<br/>
 Navigation bar (finish)<br/>
@@ -12,6 +12,6 @@ Statistic<br/>
 Friend<br/>
 
 
-###Data<br/>
+### Data<br/>
 none started
 
