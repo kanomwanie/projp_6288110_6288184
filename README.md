@@ -1,5 +1,3 @@
-# projp_6288110_6288184
-
 ## ==Current status==<br/>
 ### Screen<br/>
 Login (finish)<br/>
