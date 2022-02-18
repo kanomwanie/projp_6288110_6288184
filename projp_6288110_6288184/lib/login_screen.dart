@@ -128,11 +128,7 @@ class _Sample1State extends State<login> {
                         const SizedBox(height: 30),
                         // #login SNS
                     //    const Text("Sign in",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            shadowColor: Colors.white,
-                          ),
+                        TextButton(
                           onPressed:(){
                             Navigator.pushNamed(context,'/sign');
 
@@ -301,11 +297,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
 
                       // #text
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          shadowColor: Colors.white,
-                        ),
+                      TextButton(
                         onPressed:(){
                           Navigator.pushNamed(context,'/');
 
