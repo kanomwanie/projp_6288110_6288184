@@ -3,6 +3,8 @@ import 'login_screen.dart';
 import 'check_screen.dart';
 import 'user_screen.dart';
 import 'friend_screen.dart';
+import 'meddata_screen.dart';
+import 'satic_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -11,6 +13,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Named Route Demo',
@@ -22,6 +25,8 @@ class MyApp extends StatelessWidget {
       '/sign':(context)=>const SignUpPage(),
         '/user':(context)=>const SignUpPage(),
         '/ufc':(context)=>BottomNavBar(),
+        '/stat':(context)=>const Statistic(),
+        '/med':(context)=>const Meddata(),
       },
 
 

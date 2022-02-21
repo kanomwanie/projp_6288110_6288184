@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class user extends StatelessWidget {
@@ -84,12 +83,12 @@ class user extends StatelessWidget {
              primary: const Color(0xffedc8f5),
            ),
            onPressed: () {
-             // Respond to button press
+             Navigator.pushNamed(context,'/med',);
            },
            child: const Text('Medicine database',style: TextStyle( fontSize: 40, color: Colors.deepPurple,)),
          ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         SizedBox(
@@ -101,7 +100,7 @@ class user extends StatelessWidget {
               // foreground (text) color
             ),
             onPressed: () {
-              // Respond to button press
+              Navigator.pushNamed(context,'/stat',);
             },
             child: const Text('Statistic',style: TextStyle( fontSize: 50, color: Colors.deepPurple,)),
           ),

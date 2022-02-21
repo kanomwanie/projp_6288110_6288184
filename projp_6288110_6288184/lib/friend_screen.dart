@@ -8,94 +8,140 @@ class Friend extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-         const SizedBox(
-         height: 20,
+        const SizedBox(
+          height: 20,
         ),
-        const Text('You have xxx friends.',style: TextStyle( fontSize: 30, color: Colors.deepPurple,),textAlign: TextAlign.left,),
+        const Text(
+          'You have xxx friends.',
+          style: TextStyle(
+            fontSize: 30,
+            color: Colors.deepPurple,
+          ),
+          textAlign: TextAlign.left,
+        ),
         const SizedBox(
           height: 10,
         ),
-        Row(children: [
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            height:30, //height of button
-            width:180,
-            child:       ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                // foreground (text) color
-                primary: const Color(0xffedc8f5),
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => _buildPopupDialog(context),
-                );
-              },
-              child: const Text('User code',style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+        Row(
+          children: [
+            const SizedBox(
+              width: 10,
             ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            height:30, //height of button
-            width:200,
-            child:       ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                // foreground (text) color
-                primary: const Color(0xffedc8f5),
+            SizedBox(
+              height: 30, //height of button
+              width: 180,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  // foreground (text) color
+                  primary: const Color(0xffedc8f5),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        _buildPopupDialog(context),
+                  );
+                },
+                child: const Text('User code',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.deepPurple,
+                    )),
               ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => _buildPopupDialog2(context),
-                );
-              },
-              child: const Text('Add New Friend',style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
             ),
-          ),
-        ],),
-
+            const SizedBox(
+              width: 10,
+            ),
+            SizedBox(
+              height: 30, //height of button
+              width: 200,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  // foreground (text) color
+                  primary: const Color(0xffedc8f5),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        _buildPopupDialog2(context),
+                  );
+                },
+                child: const Text('Add New Friend',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.deepPurple,
+                    )),
+              ),
+            ),
+          ],
+        ),
         const SizedBox(
           height: 20,
         ),
         const Listf(),
-              ],
-
-            );
-          //
+      ],
+    );
+    //
   }
 }
 
 class Listf extends StatelessWidget {
-  const Listf( {Key? key}) : super(key: key);
-  static List<String> products =[
+  const Listf({Key? key}) : super(key: key);
+  static List<String> products = [
     'Peter',
     'Petra',
     'Masha',
   ];
+
   @override
   Widget build(BuildContext context) {
-    return Column(  children: <Widget>[
-      SizedBox(
-        height: 200,  //        <-- Use Expanded
-        child: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('${products[index]}',style: TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: 200, //        <-- Use Expanded
+          child: ListView.builder(
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(
+                  products[index],
+                  style: const TextStyle(
+                      color: Colors.deepPurple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25),
+                ),
+                subtitle: const Text('ID: xxxxx'),
+                trailing: Wrap(
+                  spacing: 12, // space between two icons
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.notifications),
+                      onPressed: () => {}
+                    ),
+                    IconButton(
+                        icon: const Icon(Icons.cancel),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _buildPopupDialog3(context),
+                        );
+                      },
+                    ),
 
-            );
-          },
+                  ],
+                ),
+
+              );
+            },
+          ),
         ),
-      ),
-
-    ],
+      ],
     );
   }
 }
+
 
 Widget _buildPopupDialog(BuildContext context) {
   return AlertDialog(
@@ -103,7 +149,9 @@ Widget _buildPopupDialog(BuildContext context) {
     content: Column(
       mainAxisSize: MainAxisSize.min,
       children: const <Widget>[
-        Text("11037",style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),textAlign: TextAlign.center),
+        Text("11037",
+            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center),
         Text("Send this code to your friend to add friend."),
       ],
     ),
@@ -126,8 +174,8 @@ Widget _buildPopupDialog2(BuildContext context) {
       children: const <Widget>[
         TextField(
           decoration: InputDecoration(
-              hintText: "User Code",
-              hintStyle: TextStyle(color: Colors.grey),
+            hintText: "User Code",
+            hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
         SizedBox(
@@ -150,5 +198,34 @@ Widget _buildPopupDialog2(BuildContext context) {
         child: const Text('Close'),
       ),
     ],
+  );
+}
+
+Widget _buildPopupDialog3(BuildContext context) {
+  return AlertDialog(
+      title: const Text('Unfriend'),
+  content: Column(
+  mainAxisSize: MainAxisSize.min,
+  children: const <Widget>[
+
+  Text("Are you sure you want to unfriend with xxx?",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+  ],
+  ),
+  actions: <Widget>[
+  TextButton(
+  onPressed: () {
+  Navigator.of(context).pop();
+  },
+  child: const Text('Yes'),
+  ),
+  TextButton(
+  onPressed: () {
+  Navigator.of(context).pop();
+  },
+  child: const Text('No'),
+  )
+  ,
+  ]
+  ,
   );
 }
