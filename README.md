@@ -7,8 +7,8 @@ Daily med checking (finish)<br/>
 Med database	<br/>
 Add med Data<br/>
 Statistic<br/>
-Friend<br/>
-user (work in progress)<br/>
+Friend(work in progress)<br/>
+user (finish)<br/>
 
 
 ### Data<br/>
