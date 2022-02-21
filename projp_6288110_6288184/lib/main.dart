@@ -36,9 +36,9 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBar extends State<BottomNavBar> {
   int _selectedScreenIndex = 0;
   late final List<Widget> _screens = [
-    user(),
-    check(),
-    Friend(),
+    const user(),
+    const Medcheck(),
+    const Friend(),
   ];
 
   _selectScreen(int index) {

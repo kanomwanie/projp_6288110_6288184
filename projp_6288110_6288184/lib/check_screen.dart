@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 
+class Medcheck extends StatelessWidget {
+  const Medcheck({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        SizedBox(
+          height: 20,
+        ),
+        Text('Today Meds',style: TextStyle( fontSize: 20, color: Colors.deepPurple,),textAlign: TextAlign.left,),
+        SizedBox(
+          height: 20,
+        ),
+        check(),
+      ],
+
+    );
+    //
+  }
+}
 class check extends StatelessWidget {
   const check( {Key? key}) : super(key: key);
 static List<String> products =[
