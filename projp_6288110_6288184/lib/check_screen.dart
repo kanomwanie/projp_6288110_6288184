@@ -6,21 +6,62 @@ class Medcheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        SizedBox(
+      children: [
+        const SizedBox(
           height: 20,
         ),
-        Text('Today Meds',style: TextStyle( fontSize: 20, color: Colors.deepPurple,),textAlign: TextAlign.left,),
-        SizedBox(
+        const Text('Today Meds',style: TextStyle( fontSize: 20, color: Colors.deepPurple,),textAlign: TextAlign.left,),
+        const SizedBox(
           height: 20,
         ),
-        check(),
-      ],
-
-    );
+        const check(),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height:50, //height of button
+          width:400,
+          child:       ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              // foreground (text) color
+              primary: const Color(0xffedc8f5),
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    _buildPopupDialog(context),
+              );
+            },
+            child: const Text('Check Meds Inventory',style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+          ),
+        ),
+  ]
+              );
     //
   }
 }
+
+Widget _buildPopupDialog(BuildContext context) {
+  return AlertDialog(
+    title: const Text('Inventory'),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: const <Widget>[
+        Text("You currently have enough medicine."),
+      ],
+    ),
+    actions: <Widget>[
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Close'),
+      ),
+    ],
+  );
+}
+
 class check extends StatelessWidget {
   const check( {Key? key}) : super(key: key);
 static List<String> products =[
@@ -37,7 +78,7 @@ static List<String> products =[
   Widget build(BuildContext context) {
     return Column(  children: <Widget>[
       SizedBox(
-        height: 200,  //        <-- Use Expanded
+        height: 430,  //        <-- Use Expanded
         child: ListView.builder(
       itemCount: products.length,
       itemBuilder: (context, index) {

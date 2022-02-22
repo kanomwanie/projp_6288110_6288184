@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       '/sign':(context)=>const SignUpPage(),
         '/user':(context)=>const SignUpPage(),
         '/ufc':(context)=>BottomNavBar(),
-        '/stat':(context)=>const Statistic(),
+        '/stat':(context)=>Statistic(),
         '/med':(context)=>const Meddata(),
       },
 
