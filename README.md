@@ -25,5 +25,5 @@ delete friend<br/>
 inventory warning<br/>
 
 <br>Untitled is project for runnting data retriving server.
-<br> server.dart is for fetching data from server.
+<br> server.dart is for fetching data from server. (WIP)
 
