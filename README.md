@@ -12,7 +12,18 @@ user (finish)<br/>
 
 
 ### Data<br/>
-none started
+login system<br/>
+register system<br/>
+medicine checking<br/>
+add med<br/>
+edit med<br/>
+delete med<br/>
+add friend<br/>
+noti friend<br/>
+accept friend<br/>
+delete friend<br/>
+inventory warning<br/>
 
 <br>Untitled is project for runnting data retriving server.
+<br> server.dart is for fetching data from server.
 
