@@ -13,7 +13,7 @@ void start() async {
 getname(String? name){
   return(db.collection(name));
 }
-  final corsPaths = ['/getall/:id', '/addmed', '/sign', '/fadd', '/fnoti', '/medup/:id', '/facc', '/deletemed/:id', '/deletef/:id'];
+  final corsPaths = ['/getall/:id', '/addmed', '/take/:id', '/sign', '/fadd', '/fnoti', '/medup/:id', '/facc', '/deletemed/:id', '/deletef/:id'];
   for (var route in corsPaths) {
     serv.options(route, [
           (req, res) {
@@ -29,7 +29,8 @@ getname(String? name){
         (ServRequest req, ServResponse res) async {
           var coll = getname(req.params!['id']);
       final contacts = await coll.find().toList();
-      return res.status(200).json({'data': contacts});
+          final size = await contacts.length;
+      return res.status(200).json({'data': contacts, 'size': size});
     }
   ]);
 
@@ -64,7 +65,22 @@ getname(String? name){
         (ServRequest req, ServResponse res) async {
       var coll = getname('friend');
       var v1 = await coll.findOne({"ID": req.body[0].id,'F_ID': req.body[0].fid});
-      v1["Noti"] = req.body[0].noti;
+      if(v1["Noti"] =='T'){
+        v1["Noti"] = 'F';
+      }
+      if(v1["Noti"] =='F'){
+        v1["Noti"] = 'T';
+      }
+      await coll.save(v1);
+      return res.status(200).json({'data': 'Notification updated'});
+    }
+  ]);
+  serv.post('/take/:id', [
+    setCors,
+        (ServRequest req, ServResponse res) async {
+      var coll = getname('med');
+      var v1 = await coll.findOne({"ID": req.params['id']});
+      v1["Inventory"] = v1['Inventory']-v1['size'];
       await coll.save(v1);
       return res.status(200).json({'data': 'Notification updated'});
     }
@@ -91,7 +107,7 @@ getname(String? name){
         (ServRequest req, ServResponse res) async {
       var coll = getname('friend');
       var v1 = await coll.findOne({"ID": req.body[0].id,'F_ID': req.body[0].fid});
-      v1["Noti"] = 'T';
+      v1["Added"] = 'T';
       await coll.save(v1);
       return res.status(200).json({'data': 'Friend request accepted'});
     }
@@ -101,16 +117,19 @@ getname(String? name){
         (ServRequest req, ServResponse res) async {
           var coll = getname('med');
           var um = getname('user-med');
-      await coll.remove(where.eq('ID',req.body[0].mid));
-          await um.remove({'ID': req.body[0].id, 'Med_ID':req.body[0].mid});
+          var v1 = await coll.findOne({"ID": req.body[0].mid});
+          var v2 = await um.findOne({'ID': req.body[0].id, 'Med_ID':req.body[0].mid});
+      await coll.remove(v1);
+          await um.remove(v2);
       return res.status(200);
     }
   ]);
-  serv.delete('/deletef/:id', [
+  serv.delete('/deletef', [
     setCors,
         (ServRequest req, ServResponse res) async {
       var coll = getname('friend');
-      await coll.remove(where.eq('ID', req.params['id']));
+      var v1 = await coll.findOne({'ID': req.body[0].id, 'F_ID':req.body[0].fid});
+      await coll.remove(v1);
       return res.status(200);
     }
   ]);
