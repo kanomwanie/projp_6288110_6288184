@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:sevr/sevr.dart';
 
@@ -10,7 +11,7 @@ void start() async {
   // Create serverp
   const port = 8081;
   final serv = Sevr();
-getname(String? name){
+getname(String name){
   return(db.collection(name));
 }
   final corsPaths = ['/getall/:id', '/addmed', '/take/:id', '/sign', '/fadd', '/fnoti', '/medup/:id', '/facc', '/deletemed/:id', '/deletef/:id'];
@@ -27,7 +28,7 @@ getname(String? name){
 
     setCors,
         (ServRequest req, ServResponse res) async {
-          var coll = getname(req.params!['id']);
+          var coll = getname(req.params['id']);
       final contacts = await coll.find().toList();
           final size = await contacts.length;
       return res.status(200).json({'data': contacts, 'size': size});
@@ -40,7 +41,7 @@ getname(String? name){
           var coll = getname('med');
           var um = getname('user-med');
       await coll.insertOne(req.body[0]);
-          await um.insertOne({'ID': req.params!['id'], 'Med_ID': req.body[0].id});
+          await um.insertOne({'ID': req.params['id'], 'Med_ID': req.body[0].id});
       return res.status(200).json({'data': 'Medicine added'});
     }
   ]);
