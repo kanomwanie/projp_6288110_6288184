@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class user extends StatelessWidget {
-  const user({Key? key}) : super(key: key);
+class UUser extends StatelessWidget {
+  const UUser({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class user extends StatelessWidget {
               // foreground (text) color
             ),
             onPressed: () {
-              Navigator.pushNamed(context,'/stat',);
+             Navigator.pushNamed(context,'/stat',);
             },
             child: const Text('Statistic',style: TextStyle( fontSize: 50, color: Colors.deepPurple,)),
           ),

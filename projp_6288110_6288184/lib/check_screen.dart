@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class Medcheck extends StatelessWidget {
   const Medcheck({Key? key}) : super(key: key);
 

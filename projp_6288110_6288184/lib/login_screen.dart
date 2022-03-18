@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:faker/faker.dart';
+import 'server.dart';
+import 'login_data.dart' as udata;
 
 class login extends StatefulWidget {
   static const String id = 'mentor sample 1';
 
-  const login({Key? key}) : super(key: key);
-
+ login({Key? key}) : super(key: key);
+  final server api = server();
 
   @override
   _Sample1State createState() => _Sample1State();
 }
 
 class _Sample1State extends State<login> {
+  List<user> contacts = [];
+late bool B = false;
+  final usercontrol = TextEditingController();
+  final passcontrol = TextEditingController();
+
   @override
+
+  void initState() {
+    super.initState();
+    _loadContacts();
+  }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    usercontrol.dispose();
+    passcontrol.dispose();
+    super.dispose();
+  }
+
+  void _loadContacts() {
+    widget.api.getall('user').then((A) {
+      setState(() {
+        contacts = A;
+      });
+    });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -77,9 +106,10 @@ class _Sample1State extends State<login> {
                                 decoration: BoxDecoration(
                                   border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
                                 ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                      hintText: "Email",
+                                child: TextField(
+                                  controller: usercontrol,
+                                  decoration: const InputDecoration(
+                                      hintText: "Username",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none
                                   ),
@@ -90,9 +120,10 @@ class _Sample1State extends State<login> {
                                 decoration: BoxDecoration(
                                   border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
                                 ),
-                                child: const TextField(
+                                child:  TextField(
                                   obscureText:true,
-                                  decoration: InputDecoration(
+                                  controller: passcontrol,
+                                  decoration: const InputDecoration(
                                       hintText: "Password",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none,
@@ -122,16 +153,29 @@ class _Sample1State extends State<login> {
                           ),
                         ),
                       onTap: () {
-                        Navigator.pushNamed(context,'/ufc');
+                          print(usercontrol.text);
+                          print(passcontrol.text);
+                          var w = udata.login(usercontrol.text, passcontrol.text, contacts);
+                          if( w==true){
+                            Navigator.pushNamed(context,'/ufc');
+                          }
+                          else{
+                            setState(() {
+                              B = true;
+                            });
+                          }
                       },
                     ),
+                       Visibility(
+                           child: const Text("Incorrect username or password.",style:TextStyle(color:Colors.red,fontWeight: FontWeight.bold)),
+                         visible: B,
+                       ),
                         const SizedBox(height: 30),
                         // #login SNS
                     //    const Text("Sign in",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
                         TextButton(
                           onPressed:(){
                             Navigator.pushNamed(context,'/sign');
-
                           },
 
                           child: const Text('Sign in',style: TextStyle(color: Colors.purple)),

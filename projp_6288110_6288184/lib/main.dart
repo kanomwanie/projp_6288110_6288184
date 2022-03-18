@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'check_screen.dart';
@@ -5,12 +6,13 @@ import 'user_screen.dart';
 import 'friend_screen.dart';
 import 'meddata_screen.dart';
 import 'satic_screen.dart';
+//import 'test.dart';
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -21,11 +23,10 @@ class MyApp extends StatelessWidget {
       //TODO 1:  Update Route Table HERE
       initialRoute:'/',
       routes:{
-        '/':(context)=>const login(),
+        '/':(context)=>login(),
       '/sign':(context)=>const SignUpPage(),
-        '/user':(context)=>const SignUpPage(),
         '/ufc':(context)=>BottomNavBar(),
-        '/stat':(context)=>Statistic(),
+      '/stat':(context)=>Statistic(),
         '/med':(context)=>const Meddata(),
       },
 
@@ -35,13 +36,14 @@ class MyApp extends StatelessWidget {
 }
 
 class BottomNavBar extends StatefulWidget {
+
   @override
   _BottomNavBar createState() => _BottomNavBar();
 }
 class _BottomNavBar extends State<BottomNavBar> {
   int _selectedScreenIndex = 0;
-  late final List<Widget> _screens = [
-    const user(),
+  final List<Widget> _screens = [
+    const UUser(),
     const Medcheck(),
     const Friend(),
   ];
@@ -123,20 +125,20 @@ class _BottomNavBar extends State<BottomNavBar> {
 class NavBarIcon extends StatelessWidget {
   final IconData icon;
   final IconData inactiveIcon;
-  final String? label;
-  final bool? labelOnActive;
+  final String label;
+  final bool labelOnActive;
   final bool darkMode;
   final bool active;
   final Function() onClick;
 
   const NavBarIcon({
-    required this.icon,
+  this.icon,
     this.label,
     this.labelOnActive,
-    required this.darkMode,
-    required this.active,
-    required this.inactiveIcon,
-    required this.onClick,
+    this.darkMode,
+    this.active,
+    this.inactiveIcon,
+    this.onClick,
   });
 
   Color _activeOpacity() {
@@ -177,7 +179,7 @@ class NavBarIcon extends StatelessWidget {
             if (labelOnActive == null ||
                 (labelOnActive == true && active == true))
               Text(
-                label!,
+                label,
                 style: TextStyle(
                   fontSize: 12,
                   letterSpacing: 0.5,

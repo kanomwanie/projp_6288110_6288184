@@ -8,29 +8,16 @@ class server {
     final response = await _dio.get(url);
     var A;
     if (name == 'user') {
-      A = (response.data['contacts'] as List)
-          .map<user>((json) => user.fromJson(json))
-          .toList();
+      A = (response.data['data'] as List).map<user>((json) => user.fromJson(json)).toList();
     }
     if (name == 'med') {
-      A = (response.data['contacts'] as List)
-          .map<med>((json) => med.fromJson(json))
-          .toList();
-    }
-    if (name == 'med') {
-      A = (response.data['contacts'] as List)
-          .map<med>((json) => med.fromJson(json))
-          .toList();
+      A = (response.data['data'] as List).map<med>((json) => med.fromJson(json)).toList();
     }
     if (name == 'friend') {
-      A = (response.data['contacts'] as List)
-          .map<friend>((json) => friend.fromJson(json))
-          .toList();
+      A = (response.data['data'] as List).map<friend>((json) => friend.fromJson(json)).toList();
     }
     if (name == 'user-med') {
-      A = (response.data['contacts'] as List)
-          .map<usermed>((json) => usermed.fromJson(json))
-          .toList();
+      A = (response.data['data'] as List).map<usermed>((json) => usermed.fromJson(json)).toList();
     }
     return A;
   }
@@ -124,8 +111,8 @@ class user {
 
   factory user.fromJson(Map json) {
     final id = json['ID'];
-    final username = json['username'];
-    final password = json['password'];
+    final username = json['Username'].toString();
+    final password = json['Password'].toString();
     final mid = json['M_id'];
     final fid = json['F_id'];
     return user._(id, username, password, mid, fid);

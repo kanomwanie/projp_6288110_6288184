@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'graph.dart';
 
 class Statistic extends StatefulWidget {
   @override
@@ -136,3 +135,44 @@ class NavBarIcon extends StatelessWidget {
   }
 }
 
+class Weekly extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        SizedBox(
+          height: 34,
+        ),
+        Text("week"),
+      ],
+    );
+  }
+}
+
+class Monthly extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        SizedBox(
+          height: 34,
+        ),
+        Text("month"),
+      ],
+    );
+  }
+}
+
+class Yearly extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        SizedBox(
+          height: 34,
+        ),
+        Text("year"),
+      ],
+    );
+  }
+}
