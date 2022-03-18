@@ -31,6 +31,7 @@ getname(String name){
           var coll = getname(req.params['id']);
       final contacts = await coll.find().toList();
           final size = await contacts.length;
+          print(contacts);
       return res.status(200).json({'data': contacts, 'size': size});
     }
   ]);
