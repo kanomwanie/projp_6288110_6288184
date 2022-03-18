@@ -12,8 +12,9 @@ user (finish)<br/>
 
 
 ### Data<br/>
-login system<br/>
+login system(finish)<br/>
 register system<br/>
+account<br/>
 medicine checking<br/>
 add med<br/>
 edit med<br/>
@@ -24,6 +25,6 @@ accept friend<br/>
 delete friend<br/>
 inventory warning<br/>
 
-<br>Untitled is project for runnting data retriving server.
-<br> server.dart is for fetching data from server. (WIP)
+<br>Untitled is project for running data retriving server.
+<br> server.dart is for fetching data from server.
 
