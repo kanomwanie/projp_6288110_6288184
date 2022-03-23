@@ -13,7 +13,7 @@ user (finish)<br/>
 
 ### Data<br/>
 login system(finish)<br/>
-register system<br/>
+register system(finish)<br/>
 account<br/>
 medicine checking<br/>
 add med<br/>
