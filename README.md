@@ -14,7 +14,7 @@ user (finish)<br/>
 ### Data<br/>
 login system(finish)<br/>
 register system(finish)<br/>
-account<br/>
+account(finish?)<br/>
 medicine checking<br/>
 add med<br/>
 edit med<br/>
