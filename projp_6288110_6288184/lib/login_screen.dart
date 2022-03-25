@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:faker/faker.dart';
 import 'server.dart';
 import 'login_data.dart' as udata;
 
@@ -137,8 +136,15 @@ late bool B = false;
                             ],
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 30),
                         // #login
+                        Visibility(
+                          child: const Text("Incorrect username or password.",style:TextStyle(color:Colors.red,fontWeight: FontWeight.bold)),
+                          visible: B,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                     InkWell(
                         child: Container(
                           height: 50,
@@ -153,8 +159,6 @@ late bool B = false;
                           ),
                         ),
                       onTap: () {
-                          print(usercontrol.text);
-                          print(passcontrol.text);
                           var w = udata.login(usercontrol.text, passcontrol.text, contacts);
                           if( w==true){
                             Navigator.pushNamed(context,'/ufc');
@@ -166,10 +170,7 @@ late bool B = false;
                           }
                       },
                     ),
-                       Visibility(
-                           child: const Text("Incorrect username or password.",style:TextStyle(color:Colors.red,fontWeight: FontWeight.bold)),
-                         visible: B,
-                       ),
+
                         const SizedBox(height: 30),
                         // #login SNS
                     //    const Text("Sign in",style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold),),
@@ -197,14 +198,50 @@ late bool B = false;
 ///signup part/////
 class SignUpPage extends StatefulWidget {
   static const String id = "sign_up_page";
-  const SignUpPage({Key? key}) : super(key: key);
-
+ SignUpPage({Key? key}) : super(key: key);
+  final server api = server();
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  late bool B = false;
+  final usercontrol = TextEditingController();
+  final passcontrol = TextEditingController();
+  late String tool = 'NO';
+  List<user> contacts = [];
   @override
+  void initState() {
+    super.initState();
+    _loadContacts();
+  }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    usercontrol.dispose();
+    passcontrol.dispose();
+    super.dispose();
+  }
+
+  void _loadContacts() {
+    widget.api.getall('user').then((AA) {
+      setState(() {
+        contacts = AA;
+      });
+    });
+  }
+
+_adduser(String u, String p) async {
+    final  user createdContact = await widget.api.sign(u,p);
+    setState(() {
+       tool =  createdContact.username;
+       contacts.add(createdContact);
+       udata.A.addcurrent(contacts[contacts.length -1]) ;
+
+    });
+    Navigator.pushNamed(context,'/ufc');
+  }
+
   Widget build(BuildContext context) {
     return  Scaffold(
       body: SingleChildScrollView(
@@ -267,7 +304,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       // #text_field
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 30),
-                        height: MediaQuery.of(context).size.height*0.3,
+                        height: MediaQuery.of(context).size.height*0.2,
                         width: double.infinity,
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -281,33 +318,24 @@ class _SignUpPageState extends State<SignUpPage> {
                             ]),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             TextField(
-                              decoration: InputDecoration(
+                              controller: usercontrol,
+                              decoration: const InputDecoration(
                                   contentPadding:
                                   EdgeInsets.symmetric(horizontal: 10),
                                   border: InputBorder.none,
                                   hintText: "Username",
                                   hintStyle: TextStyle(color: Colors.grey)),
                             ),
-                            Divider(
+                            const Divider(
                               thickness: 0.5,
                               height: 10,
                             ),
+
                             TextField(
-                              decoration: InputDecoration(
-                                  contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                                  border: InputBorder.none,
-                                  hintText: "Email",
-                                  hintStyle: TextStyle(color: Colors.grey)),
-                            ),
-                            Divider(
-                              thickness: 0.5,
-                              height: 10,
-                            ),
-                            TextField(
-                              decoration: InputDecoration(
+                              controller: passcontrol,
+                              decoration: const InputDecoration(
                                   contentPadding:
                                   EdgeInsets.symmetric(horizontal: 10),
                                   border: InputBorder.none,
@@ -318,12 +346,28 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       const SizedBox(
-                        height: 35,
+                        height: 25,
                       ),
-
+                      Visibility(
+                        child: const Text("Username have been used. If you already have account please go to 'Login' page.",style:TextStyle(color:Colors.red,fontWeight: FontWeight.bold)),
+                        visible: B,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       // #signup_button
                       MaterialButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          var w = udata.sign(usercontrol.text, passcontrol.text, contacts);
+                         if( w==true){
+                         _adduser(usercontrol.text, passcontrol.text);
+                         }
+                          else{
+                            setState(() {
+                              B = true;
+                            });
+                          }
+                        },
                         height: 45,
                         minWidth: 240,
                         shape: const StadiumBorder(),
@@ -335,6 +379,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold),
                         ),
+
                       ),
                       const SizedBox(
                         height: 30,

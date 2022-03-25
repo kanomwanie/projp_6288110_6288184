@@ -1,4 +1,5 @@
-import 'package:faker/faker.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'server.dart';
 
 class currentacc {
@@ -29,5 +30,20 @@ for(int i=0;i<B.length;i++){
 
   }
 }
+  return C;
+}
+
+bool sign(String u, String p, List<user> B){
+  bool C = false ;
+  int W=0;
+  for(int i=0;i<B.length;i++){
+    if(u==B[i].username){
+      break;
+    }
+    W++;
+  }
+  if(W==B.length){
+    C=true;
+  }
   return C;
 }

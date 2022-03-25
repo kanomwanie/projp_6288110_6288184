@@ -1,11 +1,43 @@
 import 'package:flutter/material.dart';
-class Medcheck extends StatelessWidget {
-  const Medcheck({Key? key}) : super(key: key);
+import 'server.dart';
+import 'login_data.dart' as udata;
+import 'med_data.dart' as mdata;
+
+class Medcheck extends StatefulWidget {
+  Medcheck({Key? key}) : super(key: key);
+  final server api = server();
+  @override
+  Medchecks createState() => Medchecks();
+}
+
+class Medchecks extends State<Medcheck> {
+  List<med> allm = [];
+  List<usermed> um = [] ;
 
   @override
+  void initState() {
+    super.initState();
+    _loadallmed();
+    _loadusermed();
+  }
+  void _loadallmed() {
+    widget.api.getall('med').then((A) {
+      setState(() {
+        allm = A;
+      });
+    });
+  }
+  void _loadusermed() {
+    widget.api.getall('usermed').then((A) {
+      setState(() {
+        um = A;
+      });
+    });
+  }
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: (mdata.checkm(allm, um))
+      ?[
         const SizedBox(
           height: 20,
         ),
@@ -13,7 +45,7 @@ class Medcheck extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        const check(),
+        check(mmed: mdata.getumed(allm, um)),
         const SizedBox(
           height: 10,
         ),
@@ -36,6 +68,17 @@ class Medcheck extends StatelessWidget {
           ),
         ),
   ]
+        : [const SizedBox(
+        height: 20,
+      ),
+        const Text('Today Meds',style: TextStyle( fontSize: 20, color: Colors.deepPurple,),textAlign: TextAlign.left,),
+        const SizedBox(
+          height: 20,
+        ),
+        const SizedBox(
+          height: 430,
+          child: Text("You currently don't have any medicine. You can go to medicine database to add medicine."),
+        ),]
               );
     //
   }
@@ -62,29 +105,20 @@ Widget _buildPopupDialog(BuildContext context) {
 }
 
 class check extends StatelessWidget {
-  const check( {Key? key}) : super(key: key);
-static List<String> products =[
-    'Painkiller',
-    'random1',
-    'random2',
-  ];
-  static List<String> INst =[
-    'Take two',
-    'Take one',
-    'Take me on',
-  ];
+  const check( {required this.mmed,Key? key,}) : super(key: key);
+  final List<med> mmed;
   @override
   Widget build(BuildContext context) {
     return Column(  children: <Widget>[
       SizedBox(
-        height: 430,  //        <-- Use Expanded
+        height: 420,  //        <-- Use Expanded
         child: ListView.builder(
-      itemCount: products.length,
+      itemCount: mmed.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text('${products[index]}',style: TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
+          title: Text('${mmed[index].name}',style: TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
           subtitle: Text(
-             ' ${INst[index]}',style: TextStyle(fontSize: 20),
+             mdata.shortentext(mmed[index].add),style: TextStyle(fontSize: 20),
 
           ),
 trailing: _AddButton(),

@@ -1,7 +1,42 @@
 import 'package:flutter/material.dart';
+import 'server.dart';
+import 'login_data.dart' as udata;
+import 'med_data.dart' as mdata;
 
-class Meddata extends StatelessWidget {
-  const Meddata({Key? key}) : super(key: key);
+class Meddata extends StatefulWidget {
+  Meddata({Key? key}) : super(key: key);
+  final server api = server();
+
+  @override
+  Meddatas createState() => Meddatas();
+}
+
+class Meddatas extends State<Meddata> {
+  List<med> allm = [];
+  List<usermed> um = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadallmed();
+    _loadusermed();
+  }
+
+  void _loadallmed() {
+    widget.api.getall('med').then((A) {
+      setState(() {
+        allm = A;
+      });
+    });
+  }
+
+  void _loadusermed() {
+    widget.api.getall('usermed').then((A) {
+      setState(() {
+        um = A;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +47,8 @@ class Meddata extends StatelessWidget {
       ),
       // 3
       body: Center(
-          child: Column(children: <Widget>[
+          child: Column(children: mdata.checkm(allm, um)
+          ?[
         const SizedBox(
           height: 20,
         ),
@@ -27,7 +63,9 @@ class Meddata extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        medl(),
+        medl(
+          fruitDataModel: mdata.getumed(allm, um),
+        ),
         const SizedBox(
           height: 10,
         ),
@@ -52,27 +90,56 @@ class Meddata extends StatelessWidget {
                 )),
           ),
         ),
-      ])),
+      ]
+              :[
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              'My medicine',
+              style: TextStyle(
+                fontSize: 30,
+                color: Colors.deepPurple,
+              ),
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+           const Text("You don't have any medicine in the database. Please press 'Add New Med' to add medicine to the database."),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 50, //height of button
+              width: 400,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  // foreground (text) color
+                  primary: const Color(0xffedc8f5),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _buildPopupDialog(context),
+                  );
+                },
+                child: const Text('Add New Med',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.deepPurple,
+                    )),
+              ),
+            ),
+          ]
+          )),
     );
   }
 }
 
 class medl extends StatelessWidget {
-  medl({Key? key}) : super(key: key);
-  static List<String> products = [
-    'Painkiller',
-    'random1',
-    'random2',
-  ];
-  static List<String> INst = [
-    'Take two',
-    'Take one',
-    'Take me on',
-  ];
-  final List<FruitDataModel> Fruitdata = List.generate(
-      products.length,
-      (index) => FruitDataModel(
-          products[index], INst[index], '${products[index]} Description...'));
+  medl({required this.fruitDataModel, Key? key}) : super(key: key);
+  final List<med> fruitDataModel;
 
   @override
   Widget build(BuildContext context) {
@@ -81,21 +148,21 @@ class medl extends StatelessWidget {
         SizedBox(
           height: 500, //        <-- Use Expanded
           child: ListView.builder(
-            itemCount: products.length,
+            itemCount: fruitDataModel.length,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(
-                  products[index],
+                  fruitDataModel[index].name,
                   style: const TextStyle(
                       color: Colors.deepPurple,
                       fontWeight: FontWeight.bold,
                       fontSize: 25),
                 ),
-                subtitle: Text(INst[index]),
+                subtitle: Text(mdata.shortentext(fruitDataModel[index].add)),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => Medinfo(
-                            fruitDataModel: Fruitdata[index],
+                            fruitDataModel: fruitDataModel[index],
                           )));
                 },
               );
@@ -108,7 +175,7 @@ class medl extends StatelessWidget {
 }
 
 class Medinfo extends StatelessWidget {
-  final FruitDataModel fruitDataModel;
+  final med fruitDataModel;
 
   const Medinfo({Key? key, required this.fruitDataModel}) : super(key: key);
 
@@ -138,12 +205,12 @@ class Medinfo extends StatelessWidget {
                     child: Text(
                       fruitDataModel.name,
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 50),
+                          fontWeight: FontWeight.bold, fontSize: 45),
                     ),
                   ),
                   Expanded(
                     child: Text(
-                      fruitDataModel.serving,
+                      mdata.sizeandintv(fruitDataModel),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -170,7 +237,7 @@ class Medinfo extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    fruitDataModel.desc,
+                    fruitDataModel.add,
                     style: const TextStyle(fontSize: 20),
                   ),
                 ],
@@ -196,7 +263,7 @@ class Medinfo extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) =>
-                          _buildPopupDialog2(context),
+                          _buildPopupDialog2(context, fruitDataModel.name),
                     );
                   },
                   child: const Text('Edit data',
@@ -221,7 +288,7 @@ class Medinfo extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) =>
-                          _buildPopupDialog3(context),
+                          _buildPopupDialog3(context, fruitDataModel.name),
                     );
                   },
                   child: const Text('Delete data',
@@ -251,48 +318,71 @@ Widget _buildPopupDialog(BuildContext context) {
     content: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const <Widget>[
-        SizedBox(
+      children: <Widget>[
+        const SizedBox(
           width: 700,
         ),
-        Text("Medicine name"),
-        TextField(
+        const Text("Medicine name"),
+        const TextField(
           decoration: InputDecoration(
             hintText: "Name",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Text("Serving size"),
-        TextField(
+        const Text("Serving size"),
+        const TextField(
           decoration: InputDecoration(
             hintText: "Size",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Text("Taken time (if required)"),
-        TextField(
-          decoration: InputDecoration(
-            hintText: "Time",
-            hintStyle: TextStyle(color: Colors.grey),
-          ),
+        const Text("Taken time (if required)"),
+        Row(
+          children: const [
+            SizedBox(
+              width: 100,
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Hours",
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 23,
+            ),
+            Text(":",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+            SizedBox(
+              width: 23,
+            ),
+            SizedBox(
+              width: 100,
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Mins",
+                  hintStyle: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+          ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Text("Additional Data"),
-        TextField(
+        const Text("Additional Data"),
+        const TextField(
           decoration: InputDecoration(
             hintText: "Additional",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
       ],
@@ -314,54 +404,54 @@ Widget _buildPopupDialog(BuildContext context) {
   );
 }
 
-Widget _buildPopupDialog2(BuildContext context) {
+Widget _buildPopupDialog2(BuildContext context, String mname) {
   return AlertDialog(
     title: const Text('Edit Medicine'),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const <Widget>[
-        SizedBox(
+      children: <Widget>[
+        const SizedBox(
           width: 700,
         ),
-        Text("Medicine name"),
-        TextField(
+        Text(mname),
+        const TextField(
           decoration: InputDecoration(
             hintText: "Name",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Text("Serving size"),
-        TextField(
+        const Text("Serving size"),
+        const TextField(
           decoration: InputDecoration(
             hintText: "Size",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Text("Taken time (if required)"),
-        TextField(
+        const Text("Taken time (if required)"),
+        const TextField(
           decoration: InputDecoration(
             hintText: "Time",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Text("Additional Data"),
-        TextField(
+        const Text("Additional Data"),
+        const TextField(
           decoration: InputDecoration(
             hintText: "Additional",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
       ],
@@ -371,7 +461,7 @@ Widget _buildPopupDialog2(BuildContext context) {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: const Text('EDIT'),
+        child: const Text('Edit'),
       ),
       TextButton(
         onPressed: () {
@@ -383,14 +473,14 @@ Widget _buildPopupDialog2(BuildContext context) {
   );
 }
 
-Widget _buildPopupDialog3(BuildContext context) {
+Widget _buildPopupDialog3(BuildContext context, String mname) {
   return AlertDialog(
     title: const Text('Delete Med data'),
     content: Column(
       mainAxisSize: MainAxisSize.min,
-      children: const <Widget>[
-
-        Text("Are you sure you want to delete this medicine data?",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      children: <Widget>[
+        Text("Are you sure you want to delete " + mname + " ?",
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       ],
     ),
     actions: <Widget>[
@@ -405,9 +495,7 @@ Widget _buildPopupDialog3(BuildContext context) {
           Navigator.of(context).pop();
         },
         child: const Text('No'),
-      )
-      ,
-    ]
-    ,
+      ),
+    ],
   );
 }

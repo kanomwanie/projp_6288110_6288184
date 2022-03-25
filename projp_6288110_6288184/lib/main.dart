@@ -6,7 +6,7 @@ import 'user_screen.dart';
 import 'friend_screen.dart';
 import 'meddata_screen.dart';
 import 'satic_screen.dart';
-//import 'test.dart';
+import 'friendrequest_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
       initialRoute:'/',
       routes:{
         '/':(context)=>login(),
-      '/sign':(context)=>const SignUpPage(),
+      '/sign':(context)=> SignUpPage(),
         '/ufc':(context)=>BottomNavBar(),
       '/stat':(context)=>Statistic(),
-        '/med':(context)=>const Meddata(),
+        '/med':(context)=> Meddata(),
       },
 
 
@@ -43,9 +43,9 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBar extends State<BottomNavBar> {
   int _selectedScreenIndex = 0;
   final List<Widget> _screens = [
-    const UUser(),
-    const Medcheck(),
-    const Friend(),
+     UUser(),
+    Medcheck(),
+     Friend(),
   ];
 
   _selectScreen(int index) {

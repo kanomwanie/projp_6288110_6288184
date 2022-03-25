@@ -1,13 +1,47 @@
 import 'package:flutter/material.dart';
+import 'server.dart';
+import 'login_data.dart' as udata;
+import 'med_data.dart' as mdata;
 
-class UUser extends StatelessWidget {
-  const UUser({Key? key}) : super(key: key);
+class UUser extends StatefulWidget {
+
+  UUser({Key? key}) : super(key: key);
+  final server api = server();
 
   @override
+  UUserstate createState() => UUserstate();
+}
+
+
+class UUserstate extends State<UUser> {
+  List<med> allm = [];
+  List<usermed> um = [] ;
+  @override
+  void initState() {
+    super.initState();
+    _loadallmed();
+    _loadusermed();
+  }
+  void _loadallmed() {
+    widget.api.getall('med').then((A) {
+      setState(() {
+        allm = A;
+      });
+    });
+  }
+  void _loadusermed() {
+    widget.api.getall('usermed').then((A) {
+      setState(() {
+        um = A;
+      });
+    });
+  }
+  @override
   Widget build(BuildContext context) {
+
     return Column(
-      children: [
-        SizedBox(
+      children:[
+        const SizedBox(
           height: 10,
         ),
         Container(
@@ -18,7 +52,7 @@ class UUser extends StatelessWidget {
         decoration: BoxDecoration(
         color: const Color(0xffedc8f5),
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
+        boxShadow: const [
         BoxShadow(
         color: Colors.grey ,
         blurRadius: 2.0,
@@ -59,12 +93,15 @@ class UUser extends StatelessWidget {
             const SizedBox(
               height: 120,
             ),
-            const Expanded(
-              child:  Text('Hello username',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50, color: Colors.deepPurple,),textAlign: TextAlign.left),
+            Expanded(
+              child:  Text('Hello '+ udata.A.current.username ,style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 50, color: Colors.deepPurple,),textAlign: TextAlign.left),
             ),
-            const Expanded(
-              child: Text('\nYou currently taking 8 medicine',style: TextStyle( fontSize: 20, color: Colors.deepPurple,), textAlign: TextAlign.left),
+            Expanded(
+              child:  (mdata.checkm(allm, um))
+    ? Text('\nYou currently taking '+ mdata.getumed(allm, um).length.toString()+ ' medicine',style: const TextStyle( fontSize: 20, color: Colors.deepPurple,), textAlign: TextAlign.left)
+    : const Text('\nYou currently taking 0 medicine' , style: TextStyle( fontSize: 20, color: Colors.deepPurple,), textAlign: TextAlign.left)
             ),
+
           ],
 
 

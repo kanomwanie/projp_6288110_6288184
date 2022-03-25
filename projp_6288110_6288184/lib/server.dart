@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
-
+import 'dart:developer';
 class server {
-  final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8081/'));
+ //final _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8081/')); // for emulator
+ final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8081/'));//for debug testing
 //get all data
   Future getall(String name) async {
     var url = '/getall/' + name;
@@ -16,30 +17,31 @@ class server {
     if (name == 'friend') {
       A = (response.data['data'] as List).map<friend>((json) => friend.fromJson(json)).toList();
     }
-    if (name == 'user-med') {
+    if (name == 'usermed') {
       A = (response.data['data'] as List).map<usermed>((json) => usermed.fromJson(json)).toList();
     }
     return A;
   }
 // register
-  Future sign(String user, String pass) async {
-    final size = await _dio.post('/getall/user');
-    final A = int.parse(size.data['size'])+1;
-    var B;
-    if (A.toString().length == 1) {
-      B ='000'+A.toString();
+  Future sign(String uuser, String pass) async {
+    final size = await _dio.get('/getall/user');
+    final AS = size.data['size']+1;
+    var BS;
+    if (AS.toString().length == 1) {
+      BS ='000'+AS.toString();
     }
-    if (A.toString().length == 2) {
-      B ='00'+A.toString();
+    if (AS.toString().length == 2) {
+      BS ='00'+AS.toString();
     }
-    if (A.toString().length == 3) {
-      B ='00'+A.toString();
+    if (AS.toString().length == 3) {
+      BS ='00'+AS.toString();
     }
-    if (A.toString().length > 3) {
-      B = A.toString();
+    if (AS.toString().length > 3) {
+      BS = AS.toString();
     }
-    final response = await _dio.post('/sign', data: {'ID': B, 'Username': user, 'Password': pass, 'M_id':'M'+B,'F_ID': 'F'+B});
-    return response.data['data'];
+    final response = await _dio.post('/sign', data: {'ID': BS, 'Username': uuser, 'Password': pass, 'M_id':'M'+BS,'F_ID': 'F'+BS});
+  user WW = user.fromJson(response.data);
+    return WW;
   }
 // add med
   Future madd(String ID, String name, String time,int hour, int min, int sizes, int intv, String add) async {
@@ -60,6 +62,7 @@ class server {
       B = A.toString();
     }
     final response = await _dio.post('/addmed/'+ID, data: {'ID': B, 'Medicine Name': name, 'Time': T.gettime(), 'Consumption size':sizes,'Inventory': intv, 'Additional information': add});
+
     return response.data['data'];
   }
 //request friend
@@ -114,7 +117,7 @@ class user {
     final username = json['Username'].toString();
     final password = json['Password'].toString();
     final mid = json['M_id'];
-    final fid = json['F_id'];
+    final fid = json['F_ID'];
     return user._(id, username, password, mid, fid);
   }
 }
@@ -133,8 +136,8 @@ class med {
     final id = json['ID'];
     final name = json['Medicine Name'];
     final time = json['Time'];
-    final size = json['Consumption size'];
-    final intv = json['Inventory'];
+    final size = json['Consumption size'].toString();
+    final intv = json['Inventory'].toString();
     var add = ' ';
     if (json['Additional information'] != null) {
       add = json['Additional information'];

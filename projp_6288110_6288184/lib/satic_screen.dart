@@ -139,40 +139,294 @@ class Weekly extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        SizedBox(
+      children: [
+        const SizedBox(
           height: 34,
         ),
-        Text("week"),
+        const Text("This week statistic",   style:TextStyle(
+          fontSize: 30,
+          color: Colors.deepPurple,
+        ),),
+        Row( mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          Container( width: 20,
+            height: 20,
+          color: Colors.green,),
+          const Text("  Taken   ",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+          Container( width: 20,
+            height: 20,
+            color: Colors.red,),
+          const Text("  Not Taken",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+        ],),
+        const SizedBox(
+          height: 20,
+        ),
+        weekl(),
+
       ],
     );
+  }
+}
+
+class weekl extends StatelessWidget {
+  //const weekl ({Key? key,}) : super(key: key);
+List<String> A = [
+  'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
+];
+  @override
+  Widget build(BuildContext context) {
+    return Column(  children: <Widget>[
+      SizedBox(
+        height: 420,  //        <-- Use Expanded
+        child: ListView.builder(
+          itemCount: A.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(A[index],style: const TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
+              subtitle: Container(height: 100,
+                decoration: const BoxDecoration(
+                    color:Color(0xffededed),
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+                child: weekdl(),
+                ),
+            );
+          },
+        ),
+      ),
+
+    ],
+    );
+  }
+}
+
+class weekdl extends StatelessWidget {
+  //const weekl ({Key? key,}) : super(key: key);
+  List<String> A = [
+    'Monday','T','w','th','f','st','s'
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+        height: 20,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: A.length, itemBuilder: (context, index) {
+          return Container(
+            width: 150,
+            child: Card(
+              color: Colors.blue,
+              child: Container(
+                child: Center(child: Text(A[index], style: TextStyle(color: Colors.white, fontSize: 20),)),
+              ),
+            ),
+          );
+        }),
+      );
   }
 }
 
 class Monthly extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        SizedBox(
+      children: [
+        const SizedBox(
           height: 34,
         ),
-        Text("month"),
+        const Text("This month statistic",   style:TextStyle(
+          fontSize: 30,
+          color: Colors.deepPurple,
+        ),),
+        Row( mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container( width: 20,
+              height: 20,
+              color: Colors.green,),
+            const Text("  Taken   ",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+            Container( width: 20,
+              height: 20,
+              color: Colors.amber,),
+            const Text("  Some Taken   ",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+            Container( width: 20,
+              height: 20,
+              color: Colors.red,),
+            const Text("  Not Taken",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+          ],),
+        const SizedBox(
+          height: 20,
+        ),
+        monthl(),
+        const SizedBox(
+          height: 20,
+        ),
+        const Text("For some taken, tap on the medicine name to see the day you miss in that week.",style: TextStyle( fontSize: 15, color: Colors.deepPurple,)),
+
       ],
     );
   }
 }
 
+class monthl extends StatelessWidget {
+  //const weekl ({Key? key,}) : super(key: key);
+  List<String> A = [
+    'Week 1','Week 2','Week ','Week 4'
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Column(  children: <Widget>[
+      SizedBox(
+        height: 470,  //        <-- Use Expanded
+        child: ListView.builder(
+          itemCount: A.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(A[index],style: const TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
+              subtitle: Container(height: 100,
+                decoration: const BoxDecoration(
+                    color:Color(0xffededed),
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+                child: monthdl(),
+              ),
+            );
+          },
+        ),
+      ),
+
+    ],
+    );
+  }
+}
+
+class monthdl extends StatelessWidget {
+  //const weekl ({Key? key,}) : super(key: key);
+  List<String> A = [
+    'Monday','T','w','th','f','st','s'
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+        height: 20,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: A.length, itemBuilder: (context, index) {
+          return Container(
+            width: 150,
+            child: Card(
+              color: Colors.blue,
+              child: Container(
+                child: Center(child: Text(A[index], style: TextStyle(color: Colors.white, fontSize: 20),)),
+              ),
+            ),
+          );
+        }),
+      );
+  }
+}
+
 class Yearly extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        SizedBox(
+      children: [
+        const SizedBox(
           height: 34,
         ),
-        Text("year"),
+        const Text("This Year statistic",   style:TextStyle(
+          fontSize: 30,
+          color: Colors.deepPurple,
+        ),),
+        Row( mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container( width: 20,
+              height: 20,
+              color: Colors.green,),
+            const Text("  Taken   ",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+            Container( width: 20,
+              height: 20,
+              color: Colors.amber,),
+            const Text("  Some Taken   ",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+            Container( width: 20,
+              height: 20,
+              color: Colors.red,),
+            const Text("  Not Taken",style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
+          ],),
+        const SizedBox(
+          height: 20,
+        ),
+        yearl(),
+        const SizedBox(
+          height: 20,
+        ),
+        const Text("For some taken, tap on the medicine name to see the day you miss in that month.",style: TextStyle( fontSize: 15, color: Colors.deepPurple,)),
       ],
     );
+  }
+}
+
+class yearl extends StatelessWidget {
+  //const weekl ({Key? key,}) : super(key: key);
+  List<String> A = [
+    'January','February','March','April','May','June','July','August','September','October','November','December'
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Column(  children: <Widget>[
+      SizedBox(
+        height: 470,  //        <-- Use Expanded
+        child: ListView.builder(
+          itemCount: A.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(A[index],style: const TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
+              subtitle: Container(height: 100,
+                decoration: const BoxDecoration(
+                    color:Color(0xffededed),
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+                child: yeardl(),
+              ),
+            );
+          },
+        ),
+      ),
+
+    ],
+    );
+  }
+}
+
+class yeardl extends StatelessWidget {
+  //const weekl ({Key? key,}) : super(key: key);
+  List<String> A = [
+    'Monday','T','w','th','f','st','s'
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+        height: 20,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: A.length, itemBuilder: (context, index) {
+          return Container(
+            width: 150,
+            child: Card(
+              color: Colors.blue,
+              child: Container(
+                child: Center(child: Text(A[index], style: TextStyle(color: Colors.white, fontSize: 20),)),
+              ),
+            ),
+          );
+        }),
+      );
   }
 }
