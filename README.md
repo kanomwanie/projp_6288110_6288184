@@ -8,7 +8,7 @@ Med database(finish)<br/>
 Add med Data(finish)<br/>
 Statistic(finish)<br/>
 Friend(finish)<br/>
-user c<br/>
+user (finish)<br/>
 
 
 ### Data<br/>
