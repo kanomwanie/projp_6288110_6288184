@@ -7,7 +7,7 @@ bool checkf(List<friend> f){
   bool isempty = false;
   var aidee = udata.A.current.fid;
   for(int i=0;i<f.length;i++){
-    if(aidee == f[i].id){
+    if(aidee == f[i].id && f[i].add=='T'){
       isempty = true;
       break;
     }
@@ -79,4 +79,55 @@ bool checkfre(List<friend> f){
     }
   }
   return isempty;
+}
+String getnoti(String id, List<friend> fr){
+  String notii = 'F';
+  for(int i=0;i<fr.length;i++){
+    if(id == fr[i].fid && udata.A.current.fid == fr[i].id){
+      notii = fr[i].noti;
+      break;
+    }
+  }
+
+  return notii;
+}
+
+String checksned(List<friend> fr, String fid){
+  String H = 'A';
+  var Q = 'F'+fid;
+  for(int i=0;i<fr.length;i++){
+    if(fid == fr[i].fid && udata.A.current.fid == fr[i].id){
+      if(fr[i].add == 'F'){
+        H = 'B';
+      }
+      else if(fr[i].add == 'T'){
+        H = 'C';
+      }
+
+      break;
+    }
+    if(udata.A.current.id == fr[i].fid && Q==fr[i].id){
+      if(fr[i].add == 'F'){
+        H = 'D';
+      }
+      else if(fr[i].add == 'T'){
+        H = 'C';
+      }
+
+      break;
+    }
+  }
+
+  return H;
+}
+
+bool checkuser (String id, List<user> u){
+  bool tt = false;
+  for(int i=0;i<u.length;i++){
+    if(u[i].id==id){
+      tt = true;
+      break;
+    }
+  }
+  return tt;
 }

@@ -48,36 +48,89 @@ class Friendreqs extends State<Friendreq> {
       ),
       // 3
       body: Center(
-          child: Column(children: <Widget>[
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              'Friend Request',
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.deepPurple,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-           Listf(frr: fdata.getfrindreq(allf, allu)
-
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-
-          ])),
+          child: Column(
+              children: (fdata.checkfre(allf))
+                  ? [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        'Friend Request',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.deepPurple,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Listf(frr: fdata.getfrindreq(allf, allu)),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ]
+                  : [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        'Friend Request',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.deepPurple,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                          "You currently don't have any friend request."),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ])),
     );
     //
   }
 }
-class Listf extends StatelessWidget {
-  const Listf({required this.frr, Key? key}) : super(key: key);
+
+class Listf extends StatefulWidget {
+  Listf({required this.frr, Key? key}) : super(key: key);
+  final server api = server();
   final List<user> frr;
+
+  @override
+  Listfs createState() => Listfs();
+}
+
+class Listfs extends State<Listf> {
+  deletereq(int index) async {
+    await widget.api.fde(udata.A.current.fid, widget.frr[index].id);
+    widget.frr.removeAt(index);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text(
+        'Friend request declined.',
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.purple,
+    ));
+    setState(() {});
+  }
+
+  addreq(int index) async {
+    await widget.api.facc(udata.A.current.fid, widget.frr[index].id);
+    widget.frr.removeAt(index);
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text(
+        'Friend request accepted.',
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.purple,
+    ));
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,28 +139,30 @@ class Listf extends StatelessWidget {
         SizedBox(
           height: 200, //        <-- Use Expanded
           child: ListView.builder(
-            itemCount: frr.length,
+            itemCount: widget.frr.length,
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(
-                  frr[index].username,
+                  widget.frr[index].username,
                   style: const TextStyle(
                       color: Colors.deepPurple,
                       fontWeight: FontWeight.bold,
                       fontSize: 25),
                 ),
-                subtitle: Text(frr[index].id),
+                subtitle: Text(widget.frr[index].id),
                 trailing: Wrap(
                   spacing: 12, // space between two icons
                   children: <Widget>[
                     IconButton(
-                      icon: const Icon(Icons.notifications),
+                      icon: const Icon(Icons.add_circle),
                       onPressed: () {
+                        addreq(index);
                       },
                     ),
                     IconButton(
                       icon: const Icon(Icons.cancel),
                       onPressed: () {
+                        deletereq(index);
                       },
                     ),
                   ],

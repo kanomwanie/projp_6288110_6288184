@@ -61,7 +61,7 @@ class Medchecks extends State<Medcheck> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) =>
-                    _buildPopupDialog(context),
+                    _buildPopupDialog(context,mdata.getumed(allm, um)),
               );
             },
             child: const Text('Check Meds Inventory',style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
@@ -84,13 +84,13 @@ class Medchecks extends State<Medcheck> {
   }
 }
 
-Widget _buildPopupDialog(BuildContext context) {
+Widget _buildPopupDialog(BuildContext context,List<med> my) {
   return AlertDialog(
     title: const Text('Inventory'),
     content: Column(
       mainAxisSize: MainAxisSize.min,
-      children: const <Widget>[
-        Text("You currently have enough medicine."),
+      children:  <Widget>[
+        Text(mdata.intvcheck(my)),
       ],
     ),
     actions: <Widget>[
@@ -116,12 +116,12 @@ class check extends StatelessWidget {
       itemCount: mmed.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text('${mmed[index].name}',style: TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
+          title: Text(mmed[index].name,style: const TextStyle(color:Colors.deepPurple, fontWeight: FontWeight.bold,fontSize: 25),),
           subtitle: Text(
-             mdata.shortentext(mmed[index].add),style: TextStyle(fontSize: 20),
+             mdata.shortentext(mmed[index].add),style: const TextStyle(fontSize: 20),
 
           ),
-trailing: _AddButton(),
+trailing: const _AddButton(),
         );
       },
     ),

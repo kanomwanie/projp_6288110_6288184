@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 class server {
  //final _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8081/')); // for emulator
  final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8081/'));//for debug testing
@@ -65,9 +67,11 @@ class server {
 
     return response.data['data'];
   }
+
 //request friend
   Future fre(String id, String fid) async {
-    final response = await _dio.post('/fadd', data: {'ID': id, 'F_ID': fid, 'Added': 'F', 'Noti':'F'});
+    var Q = 'F'+fid;
+    final response = await _dio.post('/fadd', data: {'ID': Q, 'F_ID': id, 'Added': 'F', 'Noti':'F'});
     return response.data['data'];
   }
 //recieve noti
@@ -88,7 +92,10 @@ class server {
   }
   // friend accept
   Future facc(String id, String fid) async {
+    var Q = 'F'+fid;
+    var T = id.substring(1);
     final response = await _dio.post('/facc', data: {'id': id, 'fid': fid});
+    final response2 = await _dio.post('/fadd', data: {'ID': Q, 'F_ID': T, 'Added': 'T', 'Noti':'F'});
     return response.data['data'];
   }
   //delete med
@@ -98,7 +105,10 @@ class server {
   }
   //delete friend
   Future fde(String id,String fid) async {
+    var Q = 'F'+fid;
+    var T = id.substring(1);
     final response = await _dio.delete('/deletef', data: {'id': id, 'fid': fid});
+    final response2 = await _dio.delete('/deletef', data: {'id': Q, 'fid': T});
     return response.data;
   }
 }

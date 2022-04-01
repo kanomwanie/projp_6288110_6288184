@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-
+import 'dart:convert';
 import 'server.dart';
 import 'login_data.dart' as udata;
 
@@ -52,4 +52,20 @@ String shortentext(String txt){
 String sizeandintv(med txt){
  return 'Size: '+ txt.size + '   Inventory: '+txt.intv + '   Time: ' + txt.time;
 
+}
+
+String intvcheck(List<med> mymed){
+  var result= "You currently have enough medicine.";
+  var temp = 'You should restock the following medicine: ';
+  bool R = false;
+  for(int i =0;i<mymed.length;i++){
+    if(int.parse(mymed[i].intv)<6){
+temp = temp + '\n - ' + mymed[i].name + ' ( '+ mymed[i].intv + ' pills left )';
+R=true;
+    }
+  }
+  if(R){
+    result=temp;
+  }
+  return result;
 }
