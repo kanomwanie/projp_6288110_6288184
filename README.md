@@ -8,22 +8,24 @@ Med database(finish)<br/>
 Add med Data(finish)<br/>
 Statistic(finish)<br/>
 Friend(finish)<br/>
-user (finish)<br/>
+user c<br/>
 
 
 ### Data<br/>
 login system(finish)<br/>
 register system(finish)<br/>
-account(finish?)<br/>
+account(finish)<br/>
 medicine checking<br/>
 add med<br/>
 edit med<br/>
 delete med<br/>
-add friend<br/>
-noti friend<br/>
-accept friend<br/>
-delete friend<br/>
-inventory warning<br/>
+add friend (finish)<br/>
+noti friend (finish)<br/>
+accept friend (finish)<br/>
+delete friend (finish)<br/>
+inventory warning (finish)<br/>
+notification<br/>
+statistic<br/>
 
 <br>Untitled is project for running data retriving server.
 <br> server.dart is for fetching data from server.
