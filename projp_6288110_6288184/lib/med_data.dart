@@ -49,8 +49,8 @@ String shortentext(String txt){
   }
   return wow;
 }
-String sizeandintv(med txt){
- return 'Size: '+ txt.size + '   Inventory: '+txt.intv + '   Time: ' + txt.time;
+String sizeandintv(String size, String intv, String time){
+ return 'Size: '+ size + '   Inventory: '+ intv + '   Time: ' + time;
 
 }
 
@@ -68,4 +68,44 @@ R=true;
     result=temp;
   }
   return result;
+}
+
+bool checkinput(String name, String size, String intv){
+bool result = true;
+  if(name == ''){
+   result = false;
+  }
+  if(size == ''){
+    result = false;
+  }
+  if(intv == ''){
+    result = false;
+  }
+  return result;
+}
+bool checktime(String time, String type){
+  bool r = false;
+  if(double.tryParse(time)!=null){
+    if(type == 'h'){
+      if(int.parse(time)<24){
+        r=true;
+      }
+    }
+   else if(type == 'm'){
+      if(int.parse(time)<60){
+        r=true;
+      }
+    }
+  }
+  else if(time == ''){
+    r=true;
+  }
+  return r;
+}
+bool checknum(String num){
+  bool nn = false;
+  if(double.tryParse(num)!=null || num == ''){
+    nn=true;
+  }
+  return nn;
 }

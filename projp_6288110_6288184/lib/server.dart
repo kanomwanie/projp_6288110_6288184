@@ -46,9 +46,9 @@ class server {
     return WW;
   }
 // add med
-  Future madd(String ID, String name, String time,int hour, int min, int sizes, int intv, String add) async {
-    final size = await _dio.post('/getall/med');
-    final A = int.parse(size.data['size'])+1;
+  Future madd( String id,String name, int hour, int min, int sizes, int intv, String add) async {
+    final size = await _dio.get('/getall/med');
+    final A = size.data['size']+1;
     final times T = times._(hour,min);
     var B;
     if (A.toString().length == 1) {
@@ -63,7 +63,7 @@ class server {
     if (A.toString().length > 3) {
       B = A.toString();
     }
-    final response = await _dio.post('/addmed/'+ID, data: {'ID': B, 'Medicine Name': name, 'Time': T.gettime(), 'Consumption size':sizes,'Inventory': intv, 'Additional information': add});
+    final response = await _dio.post('/addmed/'+id, data: {'ID': B, 'Medicine Name': name, 'Time': T.gettime(), 'Consumption size':sizes,'Inventory': intv, 'Additional information': add});
 
     return response.data['data'];
   }
@@ -85,7 +85,7 @@ class server {
     return response.data['data'];
   }
   //med update
-  Future mup(String ID, String name, String time,int hour, int min, int sizes, int intv, String add) async {
+  Future mup(String ID, String name, int hour, int min, int sizes, int intv, String add) async {
     final times T = times._(hour,min);
     final response = await _dio.post('/medup/'+ID, data: {'ID': ID, 'Medicine Name': name, 'Time': T.gettime(), 'Consumption size':sizes,'Inventory': intv, 'Additional information': add});
     return response.data['data'];
@@ -134,11 +134,11 @@ class user {
 
 class med {
   final String id;
-  final String name;
-  final String time;
+   final String name;
+   final String time;
   final String size;
-  final String intv;
-  final String add;
+ final String intv;
+   final String add;
 
   const med._(this.id, this.name, this.time, this.size, this.intv, this.add);
 
@@ -194,6 +194,10 @@ class times {
   final int m;
 
   const times._(this.h, this.m);
+  factory times(hour,mins) {
+
+    return times._( int.parse(hour),  int. parse(mins));
+  }
 String gettime (){
   var a = h.toString();
   var b = m.toString();
