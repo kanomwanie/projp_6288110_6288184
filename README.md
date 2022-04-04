@@ -16,9 +16,9 @@ login system(finish)<br/>
 register system(finish)<br/>
 account(finish)<br/>
 medicine checking<br/>
-add med<br/>
-edit med<br/>
-delete med<br/>
+add med(finish)<br/>
+edit med(finish)<br/>
+delete med(finish)<br/>
 add friend (finish)<br/>
 noti friend (finish)<br/>
 accept friend (finish)<br/>
