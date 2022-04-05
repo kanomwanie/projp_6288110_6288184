@@ -135,6 +135,9 @@ class Friends extends State<Friend> {
                   fl: allf,
                   notifyParent: reload,
                 ),
+          const SizedBox(
+            height: 20,
+          ),
                 SizedBox(
                   height: 50, //height of button
                   width: 400,
@@ -236,7 +239,7 @@ class Friends extends State<Friend> {
                 ),
                 const Text("You currently don't have any friend."),
                 const SizedBox(
-                  height: 461,
+                  height: 364,
                 ),
                 SizedBox(
                   height: 50, //height of button
@@ -291,7 +294,7 @@ class Listfs extends State<Listf> {
     return Column(
       children: <Widget>[
         SizedBox(
-          height: 480, //        <-- Use Expanded
+          height: 360, //        <-- Use Expanded
           child: ListView.builder(
             itemCount: widget.frr.length,
             itemBuilder: (context, index) {

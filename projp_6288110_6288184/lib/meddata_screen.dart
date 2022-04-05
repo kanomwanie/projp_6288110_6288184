@@ -58,6 +58,7 @@ class Meddatas extends State<Meddata> {
       ),
       // 3
       body: Center(
+    child: SingleChildScrollView(
           child: Column(
               children: mdata.checkm(allm, um)
                   ? [
@@ -154,7 +155,7 @@ class Meddatas extends State<Meddata> {
                         ),
                       ),
                     ])),
-    );
+    ));
   }
 }
 
@@ -225,7 +226,7 @@ class Medinfos extends State<Medinfo> {
           ),
         ),
       ),
-      body: Column(
+      body: SingleChildScrollView(child: Column(
         children: [
           Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
@@ -350,7 +351,7 @@ class Medinfos extends State<Medinfo> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
 
@@ -404,7 +405,7 @@ Widget _buildPopupDialog(BuildContext context) {
   return StatefulBuilder(builder: (context, setState) {
     return AlertDialog(
       title: const Text('Add Medicine'),
-      content: Column(
+      content: SingleChildScrollView(child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -437,7 +438,7 @@ Widget _buildPopupDialog(BuildContext context) {
           Visibility(
             child: const Text(
               'Number only',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold,fontSize: 10),
             ),
             visible: n,
           ),
@@ -482,12 +483,18 @@ Widget _buildPopupDialog(BuildContext context) {
           Visibility(
             child: const Text(
               'Please input number between 0-23 for hour and 0-59 for min.',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold,fontSize: 10),
             ),
             visible: t,
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
+          ),
+          const Text(
+              "*If there is no specific time the system will set the notification in to default time. (8:00)",
+              style: TextStyle(color: Colors.grey,fontSize: 10)),
+          const SizedBox(
+            height: 10,
           ),
           const Text("Inventory*"),
           TextField(
@@ -500,7 +507,7 @@ Widget _buildPopupDialog(BuildContext context) {
           Visibility(
             child: const Text(
               'Number only',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold,fontSize: 10),
             ),
             visible: n0,
           ),
@@ -521,15 +528,13 @@ Widget _buildPopupDialog(BuildContext context) {
           Visibility(
             child: const Text(
               'Please input in all required filed.',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold,fontSize: 10),
             ),
             visible: w,
           ),
-          const Text(
-              "*If there is no specific time the system will set the notification in to default time. (8:00)",
-              style: TextStyle(color: Colors.grey)),
+
         ],
-      ),
+      )),
       actions: <Widget>[
         TextButton(
           onPressed: () {
@@ -626,7 +631,7 @@ renotiii(String name, String size, String intv, String h, String m, String add) 
   return StatefulBuilder(builder: (context, setState) {
     return AlertDialog(
       title: const Text('Edit Medicine'),
-      content: Column(
+      content:  SingleChildScrollView(child:Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -661,7 +666,7 @@ renotiii(String name, String size, String intv, String h, String m, String add) 
           Visibility(
             child: const Text(
               'Number only',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold,fontSize: 10),
             ),
             visible: n,
           ),
@@ -710,12 +715,18 @@ renotiii(String name, String size, String intv, String h, String m, String add) 
           Visibility(
             child: const Text(
               'Please input number between 0-23 for hour and 0-59 for min.',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold,fontSize: 10),
             ),
             visible: t,
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
+          ),
+          const Text(
+              "*If there is no specific time the system will set the notification in to default time. (8:00)",
+              style: TextStyle(color: Colors.grey,fontSize: 10)),
+          const SizedBox(
+            height: 10,
           ),
           const Text("Inventory*"),
           TextField(
@@ -729,7 +740,7 @@ renotiii(String name, String size, String intv, String h, String m, String add) 
           Visibility(
             child: const Text(
               'Number only',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold,fontSize: 10),
             ),
             visible: n0,
           ),
@@ -745,9 +756,7 @@ renotiii(String name, String size, String intv, String h, String m, String add) 
               hintStyle: TextStyle(color: Colors.grey),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+
           Visibility(
             child: const Text(
               'Please input in all required filed.',
@@ -755,11 +764,9 @@ renotiii(String name, String size, String intv, String h, String m, String add) 
             ),
             visible: w,
           ),
-          const Text(
-              "*If there is no specific time the system will set the notification in to default time. (8:00)",
-              style: TextStyle(color: Colors.grey)),
+
         ],
-      ),
+      )),
       actions: <Widget>[
         TextButton(
           onPressed: () {
