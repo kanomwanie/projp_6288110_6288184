@@ -15,7 +15,7 @@ user (finish)<br/>
 login system(finish)<br/>
 register system(finish)<br/>
 account(finish)<br/>
-medicine checking<br/>
+medicine checking(finish)<br/>
 add med(finish)<br/>
 edit med(finish)<br/>
 delete med(finish)<br/>
@@ -25,7 +25,7 @@ accept friend (finish)<br/>
 delete friend (finish)<br/>
 inventory warning (finish)<br/>
 notification<br/>
-statistic<br/>
+statistic(finish)<br/>
 
 <br>Untitled is project for running data retriving server.
 <br> server.dart is for fetching data from server.
