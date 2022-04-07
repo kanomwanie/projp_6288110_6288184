@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 class server {
-  final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8081/'));
+//final _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8081/')); // for emulator
+ final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8081/'));//for debug testing
 //get all data
   Future getall(String name) async {
     var url = '/getall/' + name;
@@ -10,14 +13,17 @@ class server {
     if (name == 'user') {
       A = (response.data['data'] as List).map<user>((json) => user.fromJson(json)).toList();
     }
-    if (name == 'med') {
+   else if (name == 'med') {
       A = (response.data['data'] as List).map<med>((json) => med.fromJson(json)).toList();
     }
-    if (name == 'friend') {
+    else if (name == 'friend') {
       A = (response.data['data'] as List).map<friend>((json) => friend.fromJson(json)).toList();
     }
-    if (name == 'usermed') {
+    else  if (name == 'usermed') {
       A = (response.data['data'] as List).map<usermed>((json) => usermed.fromJson(json)).toList();
+    }
+    else if (name == 'stat') {
+      A = (response.data['data'] as List).map<stat>((json) => stat.fromJson(json)).toList();
     }
     return A;
   }
@@ -43,9 +49,9 @@ class server {
     return WW;
   }
 // add med
-  Future madd(String ID, String name, String time,int hour, int min, int sizes, int intv, String add) async {
-    final size = await _dio.post('/getall/med');
-    final A = int.parse(size.data['size'])+1;
+  Future madd( String id,String name, int hour, int min, int sizes, int intv, String add) async {
+    final size = await _dio.get('/getall/med');
+    final A = size.data['size']+1;
     final times T = times._(hour,min);
     var B;
     if (A.toString().length == 1) {
@@ -60,34 +66,41 @@ class server {
     if (A.toString().length > 3) {
       B = A.toString();
     }
-    final response = await _dio.post('/addmed/'+ID, data: {'ID': B, 'Medicine Name': name, 'Time': T.gettime(), 'Consumption size':sizes,'Inventory': intv, 'Additional information': add});
+    final response = await _dio.post('/addmed/'+id, data: {'ID': B, 'Medicine Name': name, 'Time': T.gettime(), 'Consumption size':sizes,'Inventory': intv, 'Additional information': add});
 
     return response.data['data'];
   }
+
 //request friend
   Future fre(String id, String fid) async {
-    final response = await _dio.post('/fadd', data: {'ID': id, 'F_ID': fid, 'Added': 'F', 'Noti':'F'});
+    var Q = 'F'+fid;
+    final response = await _dio.post('/fadd', data: {'ID': Q, 'F_ID': id, 'Added': 'F', 'Noti':'F'});
     return response.data['data'];
   }
-//recieve noti
+//receive noti
   Future fnoti(String id, String fid) async {
     final response = await _dio.post('/fnoti', data: {'id': id, 'fid': fid});
     return response.data['data'];
   }
   //med taken
-  Future mtake(String id) async {
-    final response = await _dio.post('/take/'+id);
+  Future mtake(String id,String mid,DateTime date) async {
+    times AW = times._(date.hour, date.minute);
+    String W = date.year.toString()+'-0'+date.month.toString()+'-0'+date.day.toString()+'T'+AW.gettime()+':00';
+    final response = await _dio.post('/take/'+mid, data: {'ID': id, 'Med_ID': mid, 'Date-Time':W});
     return response.data['data'];
   }
   //med update
-  Future mup(String ID, String name, String time,int hour, int min, int sizes, int intv, String add) async {
+  Future mup(String ID, String name, int hour, int min, int sizes, int intv, String add) async {
     final times T = times._(hour,min);
     final response = await _dio.post('/medup/'+ID, data: {'ID': ID, 'Medicine Name': name, 'Time': T.gettime(), 'Consumption size':sizes,'Inventory': intv, 'Additional information': add});
     return response.data['data'];
   }
   // friend accept
   Future facc(String id, String fid) async {
+    var Q = 'F'+fid;
+    var T = id.substring(1);
     final response = await _dio.post('/facc', data: {'id': id, 'fid': fid});
+    final response2 = await _dio.post('/fadd', data: {'ID': Q, 'F_ID': T, 'Added': 'T', 'Noti':'F'});
     return response.data['data'];
   }
   //delete med
@@ -95,9 +108,17 @@ class server {
     final response = await _dio.delete('/deletemed', data: {'id': id, 'mid': mid});
     return response.data;
   }
+  //delete stat
+  Future sde(String id,String mid,String date) async {
+    final response = await _dio.delete('/deletes', data: {'id': id, 'mid': mid, 'date':date});
+    return response.data;
+  }
   //delete friend
   Future fde(String id,String fid) async {
+    var Q = 'F'+fid;
+    var T = id.substring(1);
     final response = await _dio.delete('/deletef', data: {'id': id, 'fid': fid});
+    final response2 = await _dio.delete('/deletef', data: {'id': Q, 'fid': T});
     return response.data;
   }
 }
@@ -116,18 +137,18 @@ class user {
     final username = json['Username'].toString();
     final password = json['Password'].toString();
     final mid = json['M_id'];
-    final fid = json['F_id'];
+    final fid = json['F_ID'];
     return user._(id, username, password, mid, fid);
   }
 }
 
 class med {
   final String id;
-  final String name;
-  final String time;
+   final String name;
+   final String time;
   final String size;
-  final String intv;
-  final String add;
+ final String intv;
+   final String add;
 
   const med._(this.id, this.name, this.time, this.size, this.intv, this.add);
 
@@ -183,6 +204,10 @@ class times {
   final int m;
 
   const times._(this.h, this.m);
+  factory times(hour,mins) {
+
+    return times._( int.parse(hour),  int. parse(mins));
+  }
 String gettime (){
   var a = h.toString();
   var b = m.toString();
@@ -194,4 +219,21 @@ String gettime (){
   }
   return a+":"+b;
 }
+}
+class stat {
+  final String id;
+  final String mid;
+  final DateTime date;
+  final String dates;
+
+  const stat._(this.id, this.mid,this.date,this.dates);
+
+  factory stat.fromJson(Map json) {
+    final id = json['ID'];
+    final mid = json['Med_ID'];
+    final date = DateTime.parse(json['Date-Time']);
+    final dates = json['Date-Time'];
+
+    return stat._(id, mid,date,dates);
+  }
 }

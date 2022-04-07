@@ -6,6 +6,7 @@ import 'user_screen.dart';
 import 'friend_screen.dart';
 import 'meddata_screen.dart';
 import 'satic_screen.dart';
+import 'friendrequest_screen.dart';
 void main() {
   runApp(const MyApp());
 }

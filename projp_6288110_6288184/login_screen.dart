@@ -232,13 +232,17 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
 _adduser(String u, String p) async {
-    final  user createdContact = await widget.api.sign(u,p);
-    setState(() {
-       tool =  createdContact.username;
-       contacts.add(createdContact);
-       udata.A.addcurrent(contacts[contacts.length -1]) ;
-    });
-    Navigator.pushNamed(context,'/ufc');
+    if(u!= '' && p!=''){
+      final  user createdContact = await widget.api.sign(u,p);
+      setState(() {
+        tool =  createdContact.username;
+        contacts.add(createdContact);
+        udata.A.addcurrent(contacts[contacts.length -1]) ;
+
+      });
+      Navigator.pushNamed(context,'/ufc');
+    }
+
   }
 
   Widget build(BuildContext context) {

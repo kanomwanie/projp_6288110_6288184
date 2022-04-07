@@ -36,6 +36,12 @@ class UUserstate extends State<UUser> {
       });
     });
   }
+  void out(){
+    setState(() {
+      udata.A.removecurrent();
+    });
+    Navigator.pop(context,'/');
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -52,7 +58,7 @@ class UUserstate extends State<UUser> {
         decoration: BoxDecoration(
         color: const Color(0xffedc8f5),
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
+        boxShadow: const [
         BoxShadow(
         color: Colors.grey ,
         blurRadius: 2.0,
@@ -85,7 +91,8 @@ class UUserstate extends State<UUser> {
                     primary: const Color(0xffedc8f5),
                   ),
                   onPressed: () {
-                    Navigator.pop(context,'/');// Respond to button press
+                    out();
+                    // Respond to button press
                   },
                   child: const Text('Logout',style: TextStyle( fontSize: 20, color: Colors.deepPurple,)),
                 )]),
