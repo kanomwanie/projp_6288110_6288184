@@ -2,6 +2,7 @@
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:sevr/sevr.dart';
 
+
 void start() async {
   // Log into database
   final db = await Db.create(
@@ -14,7 +15,7 @@ void start() async {
 getname(String name){
   return(db.collection(name));
 }
-  final corsPaths = ['/getall/:id', '/addmed', '/take/:id', '/sign', '/fadd', '/fnoti', '/medup/:id', '/facc', '/deletemed/:id', '/deletef/:id'];
+  final corsPaths = ['/getall/:id', '/addmed', '/take/:id', '/sign', '/fadd', '/fnoti', '/medup/:id', '/facc', '/deletemed/:id', '/deletef/:id','/deletes'];
   for (var route in corsPaths) {
     serv.options(route, [
           (req, res) {
@@ -31,7 +32,6 @@ getname(String name){
           var coll = getname(req.params['id']);
       final contacts = await coll.find().toList();
           final size = await contacts.length;
-          print(contacts);
       return res.status(200).json({'data': contacts, 'size': size});
     }
   ]);
@@ -40,9 +40,9 @@ getname(String name){
     setCors,
         (ServRequest req, ServResponse res) async {
           var coll = getname('med');
-          var um = getname('user-med');
-      await coll.insertOne(req.body[0]);
-          await um.insertOne({'ID': req.params['id'], 'Med_ID': req.body[0].id});
+          var um = getname('usermed');
+      await coll.insertOne(req.body);
+          await um.insertOne({'ID': req.params['id'], 'Med_ID': req.body['ID']});
       return res.status(200).json({'data': 'Medicine added'});
     }
   ]);
@@ -50,15 +50,17 @@ getname(String name){
     setCors,
         (ServRequest req, ServResponse res) async {
       var coll = getname('user');
-      await coll.insertOne(req.body[0]);
-      return res.status(200).json({'data': 'Signup successful'});
+      var A = req.body['Username'];
+      await coll.insertOne(req.body);
+      var TT =  await coll.findOne(where.eq('ID', req.body['ID']));
+      return res.json(TT);
     }
   ]);
   serv.post('/fadd', [
     setCors,
         (ServRequest req, ServResponse res) async {
       var coll = getname('friend');
-      await coll.insertOne(req.body[0]);
+      await coll.insertOne(req.body);
       return res.status(200).json({'data': 'Friend requested'});
     }
   ]);
@@ -66,11 +68,11 @@ getname(String name){
     setCors,
         (ServRequest req, ServResponse res) async {
       var coll = getname('friend');
-      var v1 = await coll.findOne({"ID": req.body[0].id,'F_ID': req.body[0].fid});
+      var v1 = await coll.findOne({"ID": req.body['id'],'F_ID': req.body['fid']});
       if(v1["Noti"] =='T'){
         v1["Noti"] = 'F';
       }
-      if(v1["Noti"] =='F'){
+      else if(v1["Noti"] =='F'){
         v1["Noti"] = 'T';
       }
       await coll.save(v1);
@@ -81,10 +83,12 @@ getname(String name){
     setCors,
         (ServRequest req, ServResponse res) async {
       var coll = getname('med');
+      var coll2 = getname('stat');
+      await coll2.insertOne(req.body);
       var v1 = await coll.findOne({"ID": req.params['id']});
-      v1["Inventory"] = v1['Inventory']-v1['size'];
+      v1["Inventory"] = v1['Inventory']-v1['Consumption size'];
       await coll.save(v1);
-      return res.status(200).json({'data': 'Notification updated'});
+      return res.status(200).json({'data': 'Taken'});
     }
   ]);
   serv.post('/medup/:id', [
@@ -92,23 +96,21 @@ getname(String name){
         (ServRequest req, ServResponse res) async {
       var coll = getname('med');
       var v1 = await coll.findOne({"ID": req.params['id']});
-      v1["ID"] = req.body[0].id;
-      v1["Medicine Name"] = req.body[0].name;
-      v1["Time"] = req.body[0].time;
-      v1["Consumption size"] = req.body[0].size;
-      v1["Inventory"] = req.body[0].intv;
-      if(req.body[0].add != null){
-        v1["Additional information"] = req.body[0].add;
-      }
+      v1['Medicine Name']= req.body['Medicine Name'];
+      v1['Time']= req.body['Time'];
+      v1['Consumption size']= req.body['Consumption size'];
+      v1['Inventory']= req.body['Inventory'];
+      v1['Additional information']= req.body['Additional information'];
+
       await coll.save(v1);
-      return res.status(200).json({'data': 'Medicine updated'});
+      return res.status(200).json(v1);
     }
   ]);
   serv.post('/facc', [
     setCors,
         (ServRequest req, ServResponse res) async {
       var coll = getname('friend');
-      var v1 = await coll.findOne({"ID": req.body[0].id,'F_ID': req.body[0].fid});
+      var v1 = await coll.findOne({"ID": req.body['id'],'F_ID': req.body['fid']});
       v1["Added"] = 'T';
       await coll.save(v1);
       return res.status(200).json({'data': 'Friend request accepted'});
@@ -118,9 +120,9 @@ getname(String name){
     setCors,
         (ServRequest req, ServResponse res) async {
           var coll = getname('med');
-          var um = getname('user-med');
-          var v1 = await coll.findOne({"ID": req.body[0].mid});
-          var v2 = await um.findOne({'ID': req.body[0].id, 'Med_ID':req.body[0].mid});
+          var um = getname('usermed');
+          var v1 = await coll.findOne({"ID": req.body['mid']});
+          var v2 = await um.findOne({'ID': req.body['id'], 'Med_ID':req.body['mid']});
       await coll.remove(v1);
           await um.remove(v2);
       return res.status(200);
@@ -130,8 +132,21 @@ getname(String name){
     setCors,
         (ServRequest req, ServResponse res) async {
       var coll = getname('friend');
-      var v1 = await coll.findOne({'ID': req.body[0].id, 'F_ID':req.body[0].fid});
+      var v1 = await coll.findOne({'ID': req.body['id'],'F_ID': req.body['fid']});
       await coll.remove(v1);
+      return res.status(200);
+    }
+  ]);
+  serv.delete('/deletes', [
+    setCors,
+        (ServRequest req, ServResponse res) async {
+      var coll = getname('stat');
+      var coll2 = getname('med');
+      var v2 = await coll2.findOne({"ID": req.body['mid']});
+      v2["Inventory"] = v2['Inventory']+v2['Consumption size'];
+      var v1 = await coll.findOne({'ID': req.body['id'],'Med_ID': req.body['mid'],'Date-Time':req.body['date']});
+ await coll.remove(v1);
+await coll2.save(v2);
       return res.status(200);
     }
   ]);
