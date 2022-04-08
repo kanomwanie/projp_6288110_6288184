@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 class server {
-//final _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8081/')); // for emulator
- final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8081/'));//for debug testing
+final _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:8081/')); // for emulator
+// final _dio = Dio(BaseOptions(baseUrl: 'http://localhost:8081/'));//for debug testing
 //get all data
   Future getall(String name) async {
     var url = '/getall/' + name;

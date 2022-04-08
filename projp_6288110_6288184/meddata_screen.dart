@@ -50,7 +50,12 @@ class Meddatas extends State<Meddata> {
       appBar: AppBar(
         title: const Text('DailyMeds'),
         leading: GestureDetector(
-          onTap: () {    Navigator.pushNamed(context,'/ufc',);/* Write listener code here */ },
+          onTap: () {    Navigator.pushNamed(context,'/ufc',).then((_) {
+            // This block runs when you have returned back to the 1st Page from 2nd.
+            setState(() {
+              // Call setState to refresh the page.
+            });
+          });/* Write listener code here */ },
           child: const Icon(
             Icons.arrow_back,  // add custom icons also
           ),

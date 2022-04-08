@@ -6,14 +6,30 @@ import 'user_screen.dart';
 import 'friend_screen.dart';
 import 'meddata_screen.dart';
 import 'satic_screen.dart';
-import 'friendrequest_screen.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'notify.dart' as notii;
+import 'login_data.dart' as udata;
+import 'Friend_data.dart' as fdata;
+import 'med_data.dart' as mdata;
+import 'server.dart';
+
 void main() {
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'scheduled_channel',
+        channelName: 'Scheduled Notifications',
+        defaultColor: Colors.purple,
+        importance: NotificationImportance.High,
+      ),
+    ],
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -36,12 +52,16 @@ class MyApp extends StatelessWidget {
 }
 
 class BottomNavBar extends StatefulWidget {
-
+  final server api = server();
   @override
   _BottomNavBar createState() => _BottomNavBar();
 }
 class _BottomNavBar extends State<BottomNavBar> {
   int _selectedScreenIndex = 0;
+  List<med> allm = [];
+  List<usermed> um = [] ;
+  List<friend> allf = [];
+  List<user> allu = [];
   final List<Widget> _screens = [
      UUser(),
     Medcheck(),
@@ -54,7 +74,78 @@ class _BottomNavBar extends State<BottomNavBar> {
     });
   }
   @override
+  void _loadall(){
+    widget.api.getall('med').then((A) {
+      debugPrint(A.length.toString());
+      setState(() {
+        allm = A;
+      });
+    });
+    widget.api.getall('usermed').then((A) {
+      debugPrint(A.length.toString());
+      setState(() {
+        um = A;
+      });
+    });
+    widget.api.getall('friend').then((A) {
+      debugPrint(A.length.toString());
+      setState(() {
+        allf = A;
+      });
+    });
+    widget.api.getall('user').then((A) {
+      debugPrint(A.length.toString());
+      setState(() {
+        allu = A;
+      });
+    });
+  }
+  void initState() {
+    super.initState();
+    debugPrint('AAAAAAAAAA');
+    _loadall();
+    AwesomeNotifications().isNotificationAllowed().then(
+          (isAllowed) {
+        if (!isAllowed) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Allow Notifications'),
+              content: Text('Our app would like to send you notifications'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Don\'t Allow',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => AwesomeNotifications()
+                      .requestPermissionToSendNotifications()
+                      .then((_) => Navigator.pop(context)),
+                  child: const Text(
+                    'Allow',
+                    style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+
+  }
+  @override
   Widget build(BuildContext context) {
+    udata.A.addnotio(mdata.getumed(allm, um),udata.getallfmed(udata.getfrindacc(fdata.getfriend(allf), allu), um, allm),udata.getnamef(udata.getfrindacc(fdata.getfriend(allf), allu)));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dailymeds',  style: TextStyle(fontSize: 30),),
